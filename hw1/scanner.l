@@ -62,6 +62,7 @@
 #define LIST       strcat(buffer, yytext)
 #define LIST_FLUSH do{ if(opt_list) printf("%s", buffer); *buffer = 0; }while(0)
 #define LOG(TYPE) do{ LIST; fprintf(stderr, "token(type:%-10s) on line %4d, %3d : %s\n", #TYPE, line_no, col_no - yyleng, yytext); } while(0)
+#define INFO(msg) { LIST; fprintf(stderr, "[INFO ] line %4d:%3d %s\n", line_no, col_no - yyleng, msg); } 
 
 int opt_list = 1;
 int line_no = 1, col_no = 1;
@@ -95,6 +96,15 @@ W [wW]
 X [xX]
 Y [yY]
 Z [zZ]
+
+alpha     [a-zA-Z]
+digit     [0-9]
+alnum     ({alpha}|{digit})
+digits    {digit}+
+word      ({alnum}|_)
+int       [+-]?{digits}
+
+%x COMMENT
 
 %%
                              /* v could do something */
@@ -140,12 +150,22 @@ Z [zZ]
 "!="                        {LOG(KEYWORD); return(NEQOP);      }
 
   /* define identifier here */
+{alpha}({word}*{alnum})?    {LOG(IDENTIFIER); return(IDENTIFIER);}
 
   /* define INTEGERNUM, REALNUMBER, SCIENTIFIC here */
+{int}                       {LOG(NUMBER); return(INTEGERNUM);  }
+{int}\.{digits}             {LOG(NUMBER); return(REALNUMBER);  }
+{int}(\.{digits})?{E}{int}  {LOG(NUMBER); return(SCIENTIFIC);  }
 
   /* define single/multiple line comment here */
+"//".*                      {INFO("comment string");           }
+"/*"                        {INFO("comment string start"); BEGIN(COMMENT);}
+<COMMENT>"*/"               {INFO("comment string end"); BEGIN(0);}
+<COMMENT>\n                 {LIST; LIST_FLUSH; line_no++, col_no = 1;}
+<COMMENT>.                  {LIST; /* load in to buffer */     }
 
   /* define string constant (LITERALSTR) here */
+\"([^\\\"]|\\.)*\"          {LOG(STRING); return(LITERALSTR);  }
 
   /* define pragma here */
 
