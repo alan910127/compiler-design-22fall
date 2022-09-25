@@ -39,22 +39,22 @@
 #define RBRACE      27
 #define DOTDOT      28
 #define ASSIGNMENT  29
-#define ADDOP       20
-#define SUBOP       21
-#define MULOP       22
-#define DIVOP       23
-#define LTOP        24
-#define GTOP        25
-#define EQOP        26
-#define GETOP       27
-#define LETOP       28
-#define NEQOP       29
+#define ADDOP       30
+#define SUBOP       31
+#define MULOP       32
+#define DIVOP       33
+#define LTOP        34
+#define GTOP        35
+#define EQOP        36
+#define GETOP       37
+#define LETOP       38
+#define NEQOP       39
 
-#define IDENTIFIER  30
-#define REALNUMBER  31
-#define INTEGERNUM  32
-#define SCIENTIFIC  33
-#define LITERALSTR  34
+#define IDENTIFIER  40
+#define REALNUMBER  41
+#define INTEGERNUM  42
+#define SCIENTIFIC  43
+#define LITERALSTR  44
 
 #define YY_USER_ACTION     col_no += yyleng; // note this line
 
