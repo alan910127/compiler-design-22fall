@@ -14,6 +14,7 @@ TODOs:
     - [x] single line comment
     - [x] multiple line comment
 - [x] string literal
-- [ ] directives
-    - [ ] `pragma`'s
-    - [ ] ignore unused directives (e.g. `#if`)
+- [x] directives
+    - [x] `pragma`'s
+- [ ] distinguish an `add_op` and positive sign.
+    - This should be done in parser, not in scanner.
