@@ -102,9 +102,15 @@ digit     [0-9]
 alnum     ({alpha}|{digit})
 digits    {digit}+
 word      ({alnum}|_)
-int       [+-]?{digits}
 
-%x COMMENT
+space     [ \t]
+pragma    ^"#"{space}*{P}{R}{A}{G}{M}{A}{space}+
+list      {L}{I}{S}{T}
+on        {O}{N}
+off       {O}{F}{F}
+
+%x COMMENT 
+%x PRAGMA PRAGMA_LIST 
 
 %%
                              /* v could do something */
@@ -153,9 +159,9 @@ int       [+-]?{digits}
 {alpha}({word}*{alnum})?    {LOG(IDENTIFIER); return(IDENTIFIER);}
 
   /* define INTEGERNUM, REALNUMBER, SCIENTIFIC here */
-{int}                       {LOG(NUMBER); return(INTEGERNUM);  }
-{int}\.{digits}             {LOG(NUMBER); return(REALNUMBER);  }
-{int}(\.{digits})?{E}{int}  {LOG(NUMBER); return(SCIENTIFIC);  }
+{digits}                       {LOG(NUMBER); return(INTEGERNUM);  }
+{digits}\.{digits}             {LOG(NUMBER); return(REALNUMBER);  }
+{digits}(\.{digits})?{E}[+-]?{digits}  {LOG(NUMBER); return(SCIENTIFIC);  }
 
   /* define single/multiple line comment here */
 "//".*                      {INFO("comment string");           }
@@ -168,6 +174,13 @@ int       [+-]?{digits}
 \"([^\\\"]|\\.)*\"          {LOG(STRING); return(LITERALSTR);  }
 
   /* define pragma here */
+{pragma}                    { LIST; BEGIN(PRAGMA); }
+
+<PRAGMA>\n                  { LIST; BEGIN(INITIAL); }
+<PRAGMA>{list}{space}+      { LIST; BEGIN(PRAGMA_LIST); }
+
+<PRAGMA_LIST>{off}          { *buffer = 0; opt_list = 0; BEGIN(INITIAL); }
+<PRAGMA_LIST>{on}           { LIST; opt_list = 1; BEGIN(INITIAL); }
 
 [ \t\f\r]    LIST;
 
