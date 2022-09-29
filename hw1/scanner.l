@@ -104,13 +104,12 @@ digits    {digit}+
 word      ({alnum}|_)
 
 space     [ \t]
-pragma    ^"#"{space}*{P}{R}{A}{G}{M}{A}{space}+
+pragma    "#"{space}*{P}{R}{A}{G}{M}{A}
 list      {L}{I}{S}{T}
-on        {O}{N}
-off       {O}{F}{F}
+list_on   {pragma}{space}+{list}{space}+{O}{N}{space}*
+list_off  {pragma}{space}+{list}{space}+{O}{F}{F}{space}*
 
 %x COMMENT 
-%x PRAGMA PRAGMA_LIST 
 
 %%
                              /* v could do something */
@@ -174,13 +173,8 @@ off       {O}{F}{F}
 \"([^\\\"]|\\.)*\"          { LOG(STRING); return(LITERALSTR); }
 
   /* define pragma here */
-{pragma}                    { LIST; BEGIN(PRAGMA); }
-
-<PRAGMA>\n                  { LIST; BEGIN(INITIAL); }
-<PRAGMA>{list}{space}+      { LIST; BEGIN(PRAGMA_LIST); }
-
-<PRAGMA_LIST>{off}          { *buffer = 0; opt_list = 0; BEGIN(INITIAL); }
-<PRAGMA_LIST>{on}           { LIST; opt_list = 1; BEGIN(INITIAL); }
+^{list_off}$                { *buffer = 0; opt_list = 0; }
+^{list_on}$                 { LIST; opt_list = 1; }
 
 [ \t\f\r]    LIST;
 
