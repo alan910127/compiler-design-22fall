@@ -18,7 +18,7 @@ int fileno(FILE *);
 #define LIST       strcat(buffer, yytext)
 #define LIST_FLUSH do { if(opt_list) printf("%s", buffer); *buffer = 0; } while(0)
 #define LOG(TYPE) do { LIST; if(opt_token) fprintf(stderr, "token(type:%-10s) on line %4d, %3d : %s\n", #TYPE, line_no, col_no - yyleng, yytext); } while(0)
-#define INFO(MSG) do { LIST; fprintf(stderr, "[INFO ] line%4d:%3d %s\n", line_no, col_no - yy_leng, MSG); } while(0)
+#define INFO(MSG) do { LIST; fprintf(stderr, "[INFO ] line%4d:%3d %s\n", line_no, col_no - yyleng, MSG); } while(0)
 
 int opt_list = 1, opt_token = 0;
 int line_no = 1, col_no = 1;
