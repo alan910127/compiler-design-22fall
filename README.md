@@ -2,7 +2,7 @@
 
 ## Homework 1: Scanner
 
-Build a scanner using `lex` and `yacc`.
+Build a scanner using `lex`.
 
 TODOs:
 - [x] identifier
@@ -16,5 +16,8 @@ TODOs:
 - [x] string literal
 - [x] directives
     - [x] `pragma`'s
-- [ ] distinguish an `add_op` and positive sign.
-    - This should be done in parser, not in scanner.
+
+
+## Homework 2: Parser
+
+Build a parser using `yacc` (combine with the scanner built in homework 1).
