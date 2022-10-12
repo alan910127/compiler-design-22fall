@@ -18,7 +18,7 @@ int fileno(FILE *);
 #define LIST       strcat(buffer, yytext)
 #define LIST_FLUSH do { if(opt_list) printf("%s", buffer); *buffer = 0; } while(0)
 #define LOG(TYPE) do { LIST; if(opt_token) fprintf(stderr, "token(type:%-10s) on line %4d, %3d : %s\n", #TYPE, line_no, col_no - yyleng, yytext); } while(0)
-#define INFO(MSG) do { LIST; fprintf(stderr, "[INFO ] line%4d:%3d %s\n", line_no, col_no - yyleng, MSG); } while(0)
+#define INFO(MSG) do { LIST; if(opt_token) fprintf(stderr, "[INFO ] line%4d:%3d %s\n", line_no, col_no - yyleng, MSG); } while(0)
 
 int opt_list = 1, opt_token = 0;
 int line_no = 1, col_no = 1;
@@ -69,6 +69,10 @@ pragma            "#"{space}*{P}{R}{A}{G}{M}{A}
 list              {L}{I}{S}{T}
 list_on           {pragma}{space}+{list}{space}+{O}{N}{space}*
 list_off          {pragma}{space}+{list}{space}+{O}{F}{F}{space}*
+
+token             {T}{O}{K}{E}{N}
+token_on          {pragma}{space}+{token}{space}+{O}{N}{space}*
+token_off         {pragma}{space}+{token}{space}+{O}{F}{F}{space}*
 
 %x COMMENT
 
@@ -134,8 +138,10 @@ list_off          {pragma}{space}+{list}{space}+{O}{F}{F}{space}*
 \"([^\\\"]|\\.)*\"          { LOG(STRING); return(LITERALSTR); }
 
   /* define pragma here */
-^{list_off}$                { *buffer = 0; opt_list = 0; }
 ^{list_on}$                 { LIST; opt_list = 1; }
+^{list_off}$                { *buffer = 0; opt_list = 0; }
+^{token_on}$                { LIST; opt_token = 1; }
+^{token_off}$               { LIST; opt_token = 0; }
 
 [ \t\f\r]    LIST;
 
