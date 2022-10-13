@@ -47,7 +47,7 @@ identifier_list:
 
 declarations: 
     /* empty */
-  | declarations VAR identifier_list COLON type
+  | declarations VAR identifier_list COLON type SEMICOLON
 ;
 
 type: 
