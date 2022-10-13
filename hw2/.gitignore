@@ -4,3 +4,9 @@ parser
 
 # test output
 output/
+
+# parser graph output
+parser.dot
+parser.output
+parser.png
+parser.xml
