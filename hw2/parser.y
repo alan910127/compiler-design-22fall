@@ -52,7 +52,7 @@ declarations:
 
 type: 
     standard_type
-  | ARRAY LBRACE INTEGERNUM DOTDOT INTEGERNUM RBRACE OF type
+  | ARRAY LBRACE num DOTDOT num RBRACE OF type
 ;
 
 standard_type: 
@@ -95,13 +95,8 @@ optional_var:
 
 compound_statement:
     PBEGIN
-    optional_statements
+    statement_list
     END
-;
-
-optional_statements:
-    /* empty */
-  | statement_list
 ;
 
 statement_list:
