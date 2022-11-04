@@ -163,7 +163,9 @@ factor:
   | NOT factor
 ;
 
-num: INTEGERNUM | REALNUMBER | SCIENTIFIC ;
+num: addop num | num_value ;
+
+num_value: INTEGERNUM | REALNUMBER | SCIENTIFIC ;
 
 addop: ADDOP | SUBOP ;
 
