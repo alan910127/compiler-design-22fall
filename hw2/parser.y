@@ -63,7 +63,7 @@ standard_type:
 
 subprogram_declarations: 
     /* empty */
-  | subprogram_declarations subprogram_declaration
+  | subprogram_declarations subprogram_declaration SEMICOLON
 ;
 
 subprogram_declaration:
